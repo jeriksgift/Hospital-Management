@@ -128,8 +128,9 @@ public class LoginController {
             int rowsInserted = stmt.executeUpdate();
 
             if (rowsInserted > 0) {
-                showAlert("Success", "User registered successfully!");
+                showAlert("Success", "User registered successfully!\nYou can now log in.");
                 clear_all_fields();
+                go_to_login();
             }
 
         } catch (SQLException e) {
