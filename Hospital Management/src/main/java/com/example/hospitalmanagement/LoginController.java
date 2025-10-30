@@ -1,15 +1,23 @@
 package com.example.hospitalmanagement;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class Controller {
+public class LoginController {
+    public final String hospitalName = "Java Hospital";
     @FXML
     private TextField username_field;
     @FXML
@@ -36,12 +44,12 @@ public class Controller {
     private Button v_exit_btn;
 
 
-    public void login_btn(){
+    public void login_btn(ActionEvent event){
         if(username_field.getText().isBlank() || password_field.getText().isBlank()){
             alert_txt.setText("Please fill in all fields.");
         } else {
             alert_txt.setText("");
-            hadleLogin();
+            hadleLogin(event);
         }
     }
     public void register_btn(){
@@ -83,7 +91,7 @@ public class Controller {
         alert.setContentText(message);
         alert.showAndWait();
     }
-    private void hadleLogin(){
+    private void hadleLogin(ActionEvent event){
         DBConnection db = new DBConnection();
         String username = username_field.getText();
         String password = password_field.getText();
@@ -95,18 +103,14 @@ public class Controller {
             ResultSet rs = stmt.executeQuery();
             if(rs.next()){
                 int userType = rs.getInt("user_type");
-                if(userType == 1){
-                    showAlert("Login Successful", "Welcome Admin!");
-                } else {
-                    showAlert("Login Successful", "Welcome User!");
-                }
+                go_to_dashboard(userType, event);
             }
             else{
                 alert_txt.setText("Invalid username or password.");
             }
         }
         catch(Exception e){
-            System.out.println("Database connection error: " + e.getMessage());
+            System.out.println("Error: " + e.getMessage());
             showAlert("Error", "Database connection error!");
         }
     }
@@ -135,6 +139,28 @@ public class Controller {
                 e.printStackTrace();
                 showAlert("Error", "Database error: " + e.getMessage());
             }
+        }
+    }
+    private void go_to_dashboard(int userType, ActionEvent event){
+        try {
+            Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            currentStage.close();
+
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("dashboard.fxml"));
+            Parent root = fxmlLoader.load();
+            DashboardController dashboardController = fxmlLoader.getController();
+            dashboardController.user_type = userType;
+            dashboardController.initialize();
+            Scene scene = new Scene(root, 1250, 900);
+            Stage stage = new Stage();
+            stage.initStyle(StageStyle.DECORATED);
+            stage.setResizable(false);
+            stage.setScene(scene);
+            stage.setTitle(hospitalName);
+            stage.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+            showAlert("Error", "Failed to load dashboard: " + e.getMessage());
         }
     }
 }

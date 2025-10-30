@@ -3,3 +3,11 @@
     -fx-background-size: cover;
     -fx-background-position: center;
 }
+.box-bg{
+    -fx-background-color: rgba(140, 0, 255, 0.35);
+    -fx-background-radius: 20;
+}
+.dashboard-buttons{
+    -fx-background-color: rgba(255, 187, 225,0.5);
+    -fx-background-radius: 15;
+}
