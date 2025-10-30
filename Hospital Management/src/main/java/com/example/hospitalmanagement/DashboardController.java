@@ -38,11 +38,24 @@ public class DashboardController {
     private TableColumn<Medicine, String> colName;
     @FXML
     private TableColumn<Medicine, Double> colPrice;
+    @FXML
+    private TableView<Doctor> doctorTable;
+    @FXML
+    private TableColumn<Doctor, Integer> colDId;
+    @FXML
+    private TableColumn<Doctor, String> colDName;
+    @FXML
+    private TableColumn<Doctor, String> colDSpecialization;
+    @FXML
+    private TableColumn<Doctor, String> colDDOJ;
     private ObservableList<Medicine> medicineList = FXCollections.observableArrayList();
+    private ObservableList<Doctor> doctorList = FXCollections.observableArrayList();
     @FXML
     private AnchorPane dashboard_page;
     @FXML
     private AnchorPane medicine_page;
+    @FXML
+    private AnchorPane doctor_page;
     @FXML
     private Button medicine_btn;
     @FXML
@@ -63,7 +76,7 @@ public class DashboardController {
     private Button ambulances_btn;
 
 
-    private void hideAllPages(){
+    private void hideAllPages() {
         medicine_btn.setStyle("-fx-background-color: rgba(255, 187, 225,0.5)");
         admit_patient_btn.setStyle("-fx-background-color: rgba(255, 187, 225,0.5)");
         discharge_patient_btn.setStyle("-fx-background-color: rgba(255, 187, 225,0.5)");
@@ -76,6 +89,7 @@ public class DashboardController {
 
         dashboard_page.setVisible(false);
         medicine_page.setVisible(false);
+        doctor_page.setVisible(false);
     }
 
     public void initialize() {
@@ -83,12 +97,12 @@ public class DashboardController {
         if (user_type == 1) {
             user_type_txt.setText("Admin");
             add_doctor_btn.setVisible(true);
-        }
-        else {
+        } else {
             user_type_txt.setText("Receptionist");
             add_doctor_btn.setVisible(false);
         }
     }
+
     public void logout(ActionEvent event) {
         try {
             user_type = 0;
@@ -110,17 +124,20 @@ public class DashboardController {
             showAlert("Error", "Failed to logout: " + e.getMessage());
         }
     }
-    private void showAlert(String title, String message){
+
+    private void showAlert(String title, String message) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle(title);
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();
     }
-    public void dashboard_btn(){
+
+    public void dashboard_btn() {
         hideAllPages();
         dashboard_page.setVisible(true);
     }
+
     public void medicines_btn() {
         hideAllPages();
         medicine_page.setVisible(true);
@@ -130,13 +147,25 @@ public class DashboardController {
         colPrice.setCellValueFactory(new PropertyValueFactory<>("price"));
         loadMedicines();
     }
+
+    public void doctors_btn() {
+        hideAllPages();
+        doctor_page.setVisible(true);
+        doctors_btn.setStyle("-fx-background-color: rgba(255, 187, 225, 1)");
+        colDId.setCellValueFactory(new PropertyValueFactory<>("dId"));
+        colDName.setCellValueFactory(new PropertyValueFactory<>("dName"));
+        colDSpecialization.setCellValueFactory(new PropertyValueFactory<>("dSpecialization"));
+        colDDOJ.setCellValueFactory(new PropertyValueFactory<>("dDoj"));
+        loadDoctors();
+    }
+
     private void loadMedicines() {
         DBConnection db = new DBConnection();
         medicineList.clear();
-        try{
-             Connection conn = db.getConnection();
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery("SELECT * FROM medicines;");
+        try {
+            Connection conn = DBConnection.getConnection();
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT * FROM medicines;");
 
             while (rs.next()) {
                 medicineList.add(new Medicine(
@@ -146,6 +175,28 @@ public class DashboardController {
                 ));
             }
             medicineTable.setItems(medicineList);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void loadDoctors() {
+        DBConnection db = new DBConnection();
+        doctorList.clear();
+        try {
+            Connection conn = DBConnection.getConnection();
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT * FROM doctors;");
+
+            while (rs.next()) {
+                doctorList.add(new Doctor(
+                        rs.getInt("d_id"),
+                        rs.getString("d_name"),
+                        rs.getString("d_spelization"),
+                        rs.getString("d_doj")
+                ));
+            }
+            doctorTable.setItems(doctorList);
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -132,7 +132,7 @@
                         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                      </VBox.margin>
                   </Button>
-                  <Button fx:id="doctors_btn" layoutX="10.0" layoutY="274.0" mnemonicParsing="false" prefHeight="37.0" prefWidth="449.0" styleClass="dashboard-buttons" text="Doctors" textFill="WHITE">
+                  <Button fx:id="doctors_btn" layoutX="10.0" layoutY="274.0" mnemonicParsing="false" onAction="#doctors_btn" prefHeight="37.0" prefWidth="449.0" styleClass="dashboard-buttons" text="Doctors" textFill="WHITE">
                      <cursor>
                         <Cursor fx:constant="HAND" />
                      </cursor>
@@ -197,15 +197,36 @@
                   </AnchorPane>
                   <AnchorPane fx:id="medicine_page" layoutX="10.0" layoutY="10.0" prefHeight="809.0" prefWidth="921.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <children>
-                        <TableView fx:id="medicineTable" layoutX="14.0" prefHeight="795.0" prefWidth="818.0" style="-fx-background-color: rgba(0,0,0,0.1); -fx-background-radius: 20;" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0">
+                        <TableView fx:id="medicineTable" layoutX="14.0" prefHeight="795.0" prefWidth="818.0" style="-fx-background-color: rgba(0,0,0,0.1); -fx-background-radius: 20;" stylesheets="@style.css" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0">
                           <columns>
-                            <TableColumn fx:id="colId" editable="false" prefWidth="75.0" sortable="false" text="ID" />
-                            <TableColumn fx:id="colName" editable="false" prefWidth="75.0" sortable="false" text="Medicine Name" />
-                              <TableColumn fx:id="colPrice" editable="false" prefWidth="75.0" sortable="false" text="Pice" />
+                            <TableColumn fx:id="colId" editable="false" prefWidth="75.0" sortable="false" styleClass="column-header-background" text="ID" />
+                            <TableColumn fx:id="colName" editable="false" prefWidth="75.0" sortable="false" styleClass="column-header-background" text="Medicine Name" />
+                              <TableColumn fx:id="colPrice" editable="false" prefWidth="75.0" sortable="false" styleClass="column-header-background" text="Price" />
                           </columns>
+                           <opaqueInsets>
+                              <Insets />
+                           </opaqueInsets>
                            <columnResizePolicy>
                               <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                            </columnResizePolicy>
+                        </TableView>
+                     </children>
+                  </AnchorPane>
+                  <AnchorPane fx:id="doctor_page" layoutX="10.0" layoutY="10.0" prefHeight="809.0" prefWidth="921.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <children>
+                        <TableView fx:id="doctorTable" layoutX="14.0" prefHeight="795.0" prefWidth="818.0" style="-fx-background-color: rgba(0,0,0,0.1); -fx-background-radius: 20;" stylesheets="@style.css" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0">
+                           <columnResizePolicy>
+                              <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                           </columnResizePolicy>
+                           <columns>
+                              <TableColumn fx:id="colDId" editable="false" prefWidth="75.0" sortable="false" styleClass="column-header-background" text="ID" />
+                              <TableColumn fx:id="colDName" editable="false" prefWidth="75.0" sortable="false" styleClass="column-header-background" text="Doctor Name" />
+                              <TableColumn fx:id="colDSpecialization" editable="false" prefWidth="75.0" sortable="false" styleClass="column-header-background" text="Specialization" />
+                              <TableColumn fx:id="colDDOJ" editable="false" prefWidth="75.0" sortable="false" styleClass="column-header-background" text="Date of Joining" />
+                           </columns>
+                           <opaqueInsets>
+                              <Insets />
+                           </opaqueInsets>
                         </TableView>
                      </children>
                   </AnchorPane>
