@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.Button?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" styleClass="login-root" stylesheets="@style.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.hospitalmanagement.Controller">
+   <children>
+      <AnchorPane fx:id="login_pane" layoutX="75.0" layoutY="50.0" prefHeight="500.0" prefWidth="750.0">
+         <children>
+            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#fff1cb" height="500.0" opacity="0.3" stroke="BLACK" strokeLineCap="ROUND" strokeLineJoin="ROUND" strokeMiterLimit="30.0" strokeType="INSIDE" strokeWidth="0.0" width="750.0" />
+            <Label alignment="CENTER" layoutY="-2.0" prefHeight="35.0" prefWidth="750.0" text="Login" textFill="WHITE" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="20.0">
+               <font>
+                  <Font name="System Bold Italic" size="24.0" />
+               </font>
+            </Label>
+            <Label fx:id="alert_txt" alignment="CENTER" layoutX="1.0" layoutY="64.0" prefHeight="39.0" prefWidth="750.0" textFill="RED" AnchorPane.leftAnchor="1.0" AnchorPane.rightAnchor="-1.0" AnchorPane.topAnchor="64.0">
+               <font>
+                  <Font name="System Bold Italic" size="18.0" />
+               </font>
+            </Label>
+            <Label alignment="CENTER_RIGHT" layoutY="115.0" prefHeight="32.0" prefWidth="324.0" text="Username: " textFill="WHITE" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="120.0">
+               <font>
+                  <Font name="System Bold Italic" size="22.0" />
+               </font>
+            </Label>
+            <TextField fx:id="username_field" layoutX="332.0" layoutY="117.0" prefHeight="39.0" prefWidth="272.0" promptText="Username" AnchorPane.leftAnchor="330.0" AnchorPane.topAnchor="120.0">
+               <font>
+                  <Font name="System Bold Italic" size="18.0" />
+               </font>
+            </TextField>
+            <Label alignment="CENTER_RIGHT" layoutX="10.0" layoutY="130.0" prefHeight="32.0" prefWidth="324.0" text="Password: " textFill="WHITE" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="175.0">
+               <font>
+                  <Font name="System Bold Italic" size="22.0" />
+               </font>
+            </Label>
+            <PasswordField fx:id="password_field" layoutX="331.0" layoutY="172.0" prefHeight="39.0" prefWidth="272.0" promptText="Password" AnchorPane.leftAnchor="330.0" AnchorPane.topAnchor="175.0">
+               <font>
+                  <Font name="System Bold Italic" size="18.0" />
+               </font>
+            </PasswordField>
+            <Button alignment="CENTER" contentDisplay="CENTER" layoutX="331.0" layoutY="250.0" mnemonicParsing="false" onAction="#login_btn" style="-fx-background-color: FF8F8F; -fx-background-radius: 20;" text="Login" textFill="WHITE" AnchorPane.topAnchor="250.0">
+               <font>
+                  <Font name="System Bold Italic" size="22.0" />
+               </font>
+            </Button>
+            <Button alignment="CENTER" contentDisplay="CENTER" layoutX="341.0" layoutY="320.0" mnemonicParsing="false" onAction="#exit_btn" style="-fx-background-color: FF8F8F; -fx-background-radius: 20;" text="Exit" textFill="WHITE" AnchorPane.topAnchor="320.0">
+               <font>
+                  <Font name="System Bold Italic" size="22.0" />
+               </font>
+            </Button>
+            <Label alignment="CENTER" layoutY="400.0" onMouseClicked="#go_to_register" prefHeight="17.0" prefWidth="750.0" text="Don't have an account, Click here to login" textFill="WHITE">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+         </children>
+      </AnchorPane>
+      <AnchorPane fx:id="register_pane" layoutX="75.0" layoutY="49.0" prefHeight="500.0" prefWidth="750.0" visible="false">
+         <children>
+            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#fff1cb" height="500.0" opacity="0.3" stroke="BLACK" strokeLineCap="ROUND" strokeLineJoin="ROUND" strokeMiterLimit="30.0" strokeType="INSIDE" strokeWidth="0.0" width="750.0" />
+            <Label alignment="CENTER" layoutY="-2.0" prefHeight="35.0" prefWidth="750.0" text="Register" textFill="WHITE" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="20.0">
+               <font>
+                  <Font name="System Bold Italic" size="24.0" />
+               </font>
+            </Label>
+            <Label fx:id="alert_txt_register" alignment="CENTER" layoutX="1.0" layoutY="64.0" prefHeight="39.0" prefWidth="750.0" textFill="RED" AnchorPane.leftAnchor="1.0" AnchorPane.rightAnchor="-1.0" AnchorPane.topAnchor="64.0">
+               <font>
+                  <Font name="System Bold Italic" size="18.0" />
+               </font>
+            </Label>
+            <Label alignment="CENTER_RIGHT" layoutY="115.0" prefHeight="32.0" prefWidth="324.0" text="Username: " textFill="WHITE" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="120.0">
+               <font>
+                  <Font name="System Bold Italic" size="22.0" />
+               </font>
+            </Label>
+            <TextField fx:id="username_field_register" layoutX="332.0" layoutY="117.0" prefHeight="39.0" prefWidth="272.0" promptText="Username" AnchorPane.leftAnchor="330.0" AnchorPane.topAnchor="120.0">
+               <font>
+                  <Font name="System Bold Italic" size="18.0" />
+               </font>
+            </TextField>
+            <Label alignment="CENTER_RIGHT" layoutX="10.0" layoutY="130.0" prefHeight="32.0" prefWidth="324.0" text="Password: " textFill="WHITE" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="175.0">
+               <font>
+                  <Font name="System Bold Italic" size="22.0" />
+               </font>
+            </Label>
+            <PasswordField fx:id="password_field_register" layoutX="331.0" layoutY="172.0" prefHeight="39.0" prefWidth="272.0" promptText="Password" AnchorPane.leftAnchor="330.0" AnchorPane.topAnchor="175.0">
+               <font>
+                  <Font name="System Bold Italic" size="18.0" />
+               </font>
+            </PasswordField>
+            <Button alignment="CENTER" contentDisplay="CENTER" layoutX="319.0" layoutY="291.0" mnemonicParsing="false" onAction="#register_btn" style="-fx-background-color: FF8F8F; -fx-background-radius: 20;" text="Register" textFill="WHITE" AnchorPane.topAnchor="291.0">
+               <font>
+                  <Font name="System Bold Italic" size="22.0" />
+               </font>
+            </Button>
+            <Button alignment="CENTER" contentDisplay="CENTER" layoutX="342.0" layoutY="357.0" mnemonicParsing="false" onAction="#exit_btn" style="-fx-background-color: FF8F8F; -fx-background-radius: 20;" text="Exit" textFill="WHITE" AnchorPane.topAnchor="357.0">
+               <font>
+                  <Font name="System Bold Italic" size="22.0" />
+               </font>
+            </Button>
+            <Label alignment="CENTER" layoutY="422.0" onMouseClicked="#go_to_login" prefHeight="17.0" prefWidth="750.0" text="Don't have an account, Click here to login" textFill="WHITE">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <PasswordField fx:id="confirm_password_field_register" layoutX="330.0" layoutY="228.0" prefHeight="39.0" prefWidth="272.0" promptText="Confirm password">
+               <font>
+                  <Font name="System Bold Italic" size="18.0" />
+               </font>
+            </PasswordField>
+            <Label alignment="CENTER_RIGHT" layoutX="1.0" layoutY="231.0" prefHeight="32.0" prefWidth="324.0" text="Confirm password: " textFill="WHITE">
+               <font>
+                  <Font name="System Bold Italic" size="22.0" />
+               </font>
+            </Label>
+         </children>
+      </AnchorPane>
+   </children>
+</Pane>

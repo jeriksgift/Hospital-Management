@@ -1,0 +1,5 @@
+.login-root{
+    -fx-background-image: url("assets/login_bg.png");
+    -fx-background-size: cover;
+    -fx-background-position: center;
+}
