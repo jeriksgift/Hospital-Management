@@ -48,14 +48,35 @@ public class DashboardController {
     private TableColumn<Doctor, String> colDSpecialization;
     @FXML
     private TableColumn<Doctor, String> colDDOJ;
+    @FXML
+    private TableView<Patient> patientTable;
+    @FXML
+    private TableColumn<Patient, Integer> colPId;
+    @FXML
+    private TableColumn<Patient, String> colPName;
+    @FXML
+    private TableColumn<Patient, String> colPAge;
+    @FXML
+    private TableColumn<Patient, String> colPGender;
+    @FXML
+    private TableColumn<Patient, String> colPDisease;
+    @FXML
+    private TableColumn<Patient, Integer> colPFees;
+    @FXML
+    private TableColumn<Patient, Integer> colPRno;
+    @FXML
+    private TableColumn<Patient, String> colPAdmitDate;
     private ObservableList<Medicine> medicineList = FXCollections.observableArrayList();
     private ObservableList<Doctor> doctorList = FXCollections.observableArrayList();
+    private ObservableList<Patient> patientList = FXCollections.observableArrayList();
     @FXML
     private AnchorPane dashboard_page;
     @FXML
     private AnchorPane medicine_page;
     @FXML
     private AnchorPane doctor_page;
+    @FXML
+    private AnchorPane patients_page;
     @FXML
     private Button medicine_btn;
     @FXML
@@ -90,6 +111,7 @@ public class DashboardController {
         dashboard_page.setVisible(false);
         medicine_page.setVisible(false);
         doctor_page.setVisible(false);
+        patients_page.setVisible(false);
     }
 
     public void initialize() {
@@ -101,6 +123,8 @@ public class DashboardController {
             user_type_txt.setText("Receptionist");
             add_doctor_btn.setVisible(false);
         }
+        hideAllPages();
+        dashboard_page.setVisible(true);
     }
 
     public void logout(ActionEvent event) {
@@ -159,6 +183,20 @@ public class DashboardController {
         loadDoctors();
     }
 
+    public void patients_info_btn() {
+        hideAllPages();
+        patients_page.setVisible(true);
+        patient_info_btn.setStyle("-fx-background-color: rgba(255, 187, 225, 1)");
+        colPId.setCellValueFactory(new PropertyValueFactory<>("pId"));
+        colPName.setCellValueFactory(new PropertyValueFactory<>("pName"));
+        colPAge.setCellValueFactory(new PropertyValueFactory<>("pAge"));
+        colPGender.setCellValueFactory(new PropertyValueFactory<>("pGender"));
+        colPDisease.setCellValueFactory(new PropertyValueFactory<>("pDisease"));
+        colPFees.setCellValueFactory(new PropertyValueFactory<>("pFees"));
+        colPRno.setCellValueFactory(new PropertyValueFactory<>("pRno"));
+        colPAdmitDate.setCellValueFactory(new PropertyValueFactory<>("pAdmitDate"));
+        loadPatients();
+    }
     private void loadMedicines() {
         DBConnection db = new DBConnection();
         medicineList.clear();
@@ -197,6 +235,32 @@ public class DashboardController {
                 ));
             }
             doctorTable.setItems(doctorList);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void loadPatients() {
+        DBConnection db = new DBConnection();
+        patientList.clear();
+        try {
+            Connection conn = DBConnection.getConnection();
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT * FROM patients;");
+
+            while (rs.next()) {
+                patientList.add(new Patient(
+                        rs.getInt("p_id"),
+                        rs.getString("p_name"),
+                        rs.getInt("p_age"),
+                        rs.getString("p_gender"),
+                        rs.getString("p_disease"),
+                        rs.getInt("p_fees"),
+                        rs.getInt("p_rno"),
+                        rs.getString("p_admitted_date")
+                ));
+            }
+            patientTable.setItems(patientList);
         } catch (Exception e) {
             e.printStackTrace();
         }
