@@ -1,5 +1,7 @@
 package com.example.hospitalmanagement;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -7,8 +9,14 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.Statement;
 
 public class DashboardController {
     public int user_type;
@@ -22,6 +30,53 @@ public class DashboardController {
     private Label user_type_txt;
     @FXML
     private Button add_doctor_btn;
+    @FXML
+    private TableView<Medicine> medicineTable;
+    @FXML
+    private TableColumn<Medicine, Integer> colId;
+    @FXML
+    private TableColumn<Medicine, String> colName;
+    @FXML
+    private TableColumn<Medicine, Double> colPrice;
+    private ObservableList<Medicine> medicineList = FXCollections.observableArrayList();
+    @FXML
+    private AnchorPane dashboard_page;
+    @FXML
+    private AnchorPane medicine_page;
+    @FXML
+    private Button medicine_btn;
+    @FXML
+    private Button admit_patient_btn;
+    @FXML
+    private Button discharge_patient_btn;
+    @FXML
+    private Button patient_info_btn;
+    @FXML
+    private Button update_patient_details_btn;
+    @FXML
+    private Button billing_btn;
+    @FXML
+    private Button rooms_btn;
+    @FXML
+    private Button doctors_btn;
+    @FXML
+    private Button ambulances_btn;
+
+
+    private void hideAllPages(){
+        medicine_btn.setStyle("-fx-background-color: rgba(255, 187, 225,0.5)");
+        admit_patient_btn.setStyle("-fx-background-color: rgba(255, 187, 225,0.5)");
+        discharge_patient_btn.setStyle("-fx-background-color: rgba(255, 187, 225,0.5)");
+        patient_info_btn.setStyle("-fx-background-color: rgba(255, 187, 225,0.5)");
+        update_patient_details_btn.setStyle("-fx-background-color: rgba(255, 187, 225,0.5)");
+        billing_btn.setStyle("-fx-background-color: rgba(255, 187, 225,0.5)");
+        rooms_btn.setStyle("-fx-background-color: rgba(255, 187, 225,0.5)");
+        doctors_btn.setStyle("-fx-background-color: rgba(255, 187, 225,0.5)");
+        ambulances_btn.setStyle("-fx-background-color: rgba(255, 187, 225,0.5)");
+
+        dashboard_page.setVisible(false);
+        medicine_page.setVisible(false);
+    }
 
     public void initialize() {
         hospital_Name.setText(hospitalName);
@@ -61,5 +116,38 @@ public class DashboardController {
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();
+    }
+    public void dashboard_btn(){
+        hideAllPages();
+        dashboard_page.setVisible(true);
+    }
+    public void medicines_btn() {
+        hideAllPages();
+        medicine_page.setVisible(true);
+        medicine_btn.setStyle("-fx-background-color: rgba(255, 187, 225, 1)");
+        colId.setCellValueFactory(new PropertyValueFactory<>("medId"));
+        colName.setCellValueFactory(new PropertyValueFactory<>("medName"));
+        colPrice.setCellValueFactory(new PropertyValueFactory<>("price"));
+        loadMedicines();
+    }
+    private void loadMedicines() {
+        DBConnection db = new DBConnection();
+        medicineList.clear();
+        try{
+             Connection conn = db.getConnection();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery("SELECT * FROM medicines;");
+
+            while (rs.next()) {
+                medicineList.add(new Medicine(
+                        rs.getInt("med_id"),
+                        rs.getString("med_name"),
+                        rs.getDouble("price")
+                ));
+            }
+            medicineTable.setItems(medicineList);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
