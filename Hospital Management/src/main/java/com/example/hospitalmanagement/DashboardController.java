@@ -66,9 +66,18 @@ public class DashboardController {
     private TableColumn<Patient, Integer> colPRno;
     @FXML
     private TableColumn<Patient, String> colPAdmitDate;
+    @FXML
+    private TableView<Room> roomTable;
+    @FXML
+    private TableColumn<Room, Integer> colRNo;
+    @FXML
+    private TableColumn<Room, String> colRType;
+    @FXML
+    private TableColumn<Room, String> colRStatus;
     private ObservableList<Medicine> medicineList = FXCollections.observableArrayList();
     private ObservableList<Doctor> doctorList = FXCollections.observableArrayList();
     private ObservableList<Patient> patientList = FXCollections.observableArrayList();
+    private ObservableList<Room> roomList = FXCollections.observableArrayList();
     @FXML
     private AnchorPane dashboard_page;
     @FXML
@@ -77,6 +86,8 @@ public class DashboardController {
     private AnchorPane doctor_page;
     @FXML
     private AnchorPane patients_page;
+    @FXML
+    private AnchorPane rooms_page;
     @FXML
     private Button medicine_btn;
     @FXML
@@ -112,6 +123,7 @@ public class DashboardController {
         medicine_page.setVisible(false);
         doctor_page.setVisible(false);
         patients_page.setVisible(false);
+        rooms_page.setVisible(false);
     }
 
     public void initialize() {
@@ -197,6 +209,15 @@ public class DashboardController {
         colPAdmitDate.setCellValueFactory(new PropertyValueFactory<>("pAdmitDate"));
         loadPatients();
     }
+    public void rooms_btn_onClick() {
+        hideAllPages();
+        rooms_page.setVisible(true);
+        rooms_btn.setStyle("-fx-background-color: rgba(255, 187, 225, 1)");
+        colRNo.setCellValueFactory(new PropertyValueFactory<>("rNo"));
+        colRType.setCellValueFactory(new PropertyValueFactory<>("rType"));
+        colRStatus.setCellValueFactory(new PropertyValueFactory<>("status"));
+        loadRooms();
+    }
     private void loadMedicines() {
         DBConnection db = new DBConnection();
         medicineList.clear();
@@ -261,6 +282,26 @@ public class DashboardController {
                 ));
             }
             patientTable.setItems(patientList);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    private void loadRooms() {
+        DBConnection db = new DBConnection();
+        roomList.clear();
+        try {
+            Connection conn = DBConnection.getConnection();
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT * FROM rooms;");
+
+            while (rs.next()) {
+                roomList.add(new Room(
+                        rs.getInt("r_no"),
+                        rs.getString("r_type"),
+                        rs.getInt("r_available")
+                ));
+            }
+            roomTable.setItems(roomList);
         } catch (Exception e) {
             e.printStackTrace();
         }

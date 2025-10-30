@@ -121,7 +121,7 @@
                         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                      </VBox.margin>
                   </Button>
-                  <Button fx:id="rooms_btn" layoutX="10.0" layoutY="230.0" mnemonicParsing="false" prefHeight="37.0" prefWidth="449.0" styleClass="dashboard-buttons" text="Rooms" textFill="WHITE">
+                  <Button fx:id="rooms_btn" layoutX="10.0" layoutY="230.0" mnemonicParsing="false" onAction="#rooms_btn_onClick" prefHeight="37.0" prefWidth="449.0" styleClass="dashboard-buttons" text="Rooms" textFill="WHITE">
                      <cursor>
                         <Cursor fx:constant="HAND" />
                      </cursor>
@@ -181,7 +181,7 @@
             </VBox>
             <AnchorPane prefHeight="200.0" prefWidth="200.0" styleClass="box-bg" GridPane.columnIndex="1" GridPane.rowIndex="1">
                <children>
-                  <AnchorPane fx:id="dashboard_page" prefHeight="809.0" prefWidth="921.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                  <AnchorPane fx:id="dashboard_page" prefHeight="809.0" prefWidth="921.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <children>
                         <ImageView fitHeight="327.0" fitWidth="359.0" layoutX="282.0" layoutY="150.0" pickOnBounds="true" preserveRatio="true">
                            <image>
@@ -245,6 +245,23 @@
                               <TableColumn fx:id="colPFees" editable="false" prefWidth="75.0" sortable="false" styleClass="column-header-background" text="Fees" />
                               <TableColumn fx:id="colPRno" editable="false" prefWidth="75.0" sortable="false" styleClass="column-header-background" text="Room no." />
                               <TableColumn fx:id="colPAdmitDate" editable="false" prefWidth="75.0" sortable="false" styleClass="column-header-background" text="Admited date" />
+                           </columns>
+                           <opaqueInsets>
+                              <Insets />
+                           </opaqueInsets>
+                        </TableView>
+                     </children>
+                  </AnchorPane>
+                  <AnchorPane fx:id="rooms_page" layoutX="10.0" layoutY="10.0" prefHeight="809.0" prefWidth="921.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <children>
+                        <TableView fx:id="roomTable" layoutX="14.0" prefHeight="795.0" prefWidth="818.0" style="-fx-background-color: rgba(0,0,0,0.1); -fx-background-radius: 20;" stylesheets="@style.css" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0">
+                           <columnResizePolicy>
+                              <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                           </columnResizePolicy>
+                           <columns>
+                              <TableColumn fx:id="colRNo" editable="false" prefWidth="75.0" sortable="false" styleClass="column-header-background" text="Room No." />
+                              <TableColumn fx:id="colRType" editable="false" prefWidth="75.0" sortable="false" styleClass="column-header-background" text="Room Type" />
+                              <TableColumn fx:id="colRStatus" editable="false" prefWidth="75.0" sortable="false" styleClass="column-header-background" text="Status" />
                            </columns>
                            <opaqueInsets>
                               <Insets />
