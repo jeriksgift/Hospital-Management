@@ -74,10 +74,19 @@ public class DashboardController {
     private TableColumn<Room, String> colRType;
     @FXML
     private TableColumn<Room, String> colRStatus;
+    @FXML
+    private TableView<Ambulance> ambulanceTable;
+    @FXML
+    private TableColumn<Ambulance, Integer> colDriId;
+    @FXML
+    private TableColumn<Ambulance, String> colDDriName;
+    @FXML
+    private TableColumn<Ambulance, String> VNo;
     private ObservableList<Medicine> medicineList = FXCollections.observableArrayList();
     private ObservableList<Doctor> doctorList = FXCollections.observableArrayList();
     private ObservableList<Patient> patientList = FXCollections.observableArrayList();
     private ObservableList<Room> roomList = FXCollections.observableArrayList();
+    private ObservableList<Ambulance> ambulanceList = FXCollections.observableArrayList();
     @FXML
     private AnchorPane dashboard_page;
     @FXML
@@ -88,6 +97,8 @@ public class DashboardController {
     private AnchorPane patients_page;
     @FXML
     private AnchorPane rooms_page;
+    @FXML
+    private AnchorPane ambulance_page;
     @FXML
     private Button medicine_btn;
     @FXML
@@ -124,6 +135,7 @@ public class DashboardController {
         doctor_page.setVisible(false);
         patients_page.setVisible(false);
         rooms_page.setVisible(false);
+        ambulance_page.setVisible(false);
     }
 
     public void initialize() {
@@ -218,6 +230,15 @@ public class DashboardController {
         colRStatus.setCellValueFactory(new PropertyValueFactory<>("status"));
         loadRooms();
     }
+    public void ambulances_btn(){
+        hideAllPages();
+        ambulance_page.setVisible(true);
+        ambulances_btn.setStyle("-fx-background-color: rgba(255, 187, 225, 1)");
+        colDriId.setCellValueFactory(new PropertyValueFactory<>("driId"));
+        colDDriName.setCellValueFactory(new PropertyValueFactory<>("driName"));
+        VNo.setCellValueFactory(new PropertyValueFactory<>("vNo"));
+        loadAmbulances();
+    }
     private void loadMedicines() {
         DBConnection db = new DBConnection();
         medicineList.clear();
@@ -302,6 +323,26 @@ public class DashboardController {
                 ));
             }
             roomTable.setItems(roomList);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    private void loadAmbulances() {
+        DBConnection db = new DBConnection();
+        ambulanceList.clear();
+        try {
+            Connection conn = DBConnection.getConnection();
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT * FROM ambulances;");
+
+            while (rs.next()) {
+                ambulanceList.add(new Ambulance(
+                        rs.getInt("dri_id"),
+                        rs.getString("dri_name"),
+                        rs.getString("v_no")
+                ));
+            }
+            ambulanceTable.setItems(ambulanceList);
         } catch (Exception e) {
             e.printStackTrace();
         }
