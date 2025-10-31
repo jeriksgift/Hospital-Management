@@ -106,6 +106,8 @@ public class DashboardController {
     @FXML
     private AnchorPane add_ambulance_page;
     @FXML
+    private AnchorPane admit_patient_page;
+    @FXML
     private Button medicine_btn;
     @FXML
     private Button admit_patient_btn;
@@ -131,8 +133,20 @@ public class DashboardController {
     private TextField ambulanceNameTxtField;
     @FXML
     private TextField ambulanceVnoTxtField;
-
-
+    @FXML
+    private TextField patientNameTxtField;
+    @FXML
+    private TextField ageTxtField;
+    @FXML
+    private RadioButton mGenderRBtn;
+    @FXML
+    private RadioButton fGenderRBtn;
+    @FXML
+    private TextField diseaseTxtField;
+    @FXML
+    private TextField feesTxtField;
+    @FXML
+    private ChoiceBox<Integer> rNoChoiceBox;
     private void hideAllPages() {
         medicine_btn.setStyle("-fx-background-color: rgba(255, 187, 225,0.5)");
         admit_patient_btn.setStyle("-fx-background-color: rgba(255, 187, 225,0.5)");
@@ -143,6 +157,8 @@ public class DashboardController {
         rooms_btn.setStyle("-fx-background-color: rgba(255, 187, 225,0.5)");
         doctors_btn.setStyle("-fx-background-color: rgba(255, 187, 225,0.5)");
         ambulances_btn.setStyle("-fx-background-color: rgba(255, 187, 225,0.5)");
+        add_doctor_btn.setStyle("-fx-background-color: rgba(255, 187, 225,0.5)");
+        add_ambulance_btn.setStyle("-fx-background-color: rgba(255, 187, 225,0.5)");
 
         dashboard_page.setVisible(false);
         medicine_page.setVisible(false);
@@ -152,6 +168,7 @@ public class DashboardController {
         ambulance_page.setVisible(false);
         add_doctor_page.setVisible(false);
         add_ambulance_page.setVisible(false);
+        admit_patient_page.setVisible(false);
     }
 
     public void initialize() {
@@ -260,6 +277,23 @@ public class DashboardController {
     public void go_to_add_doctor_page() {
         hideAllPages();
         add_doctor_page.setVisible(true);
+        add_doctor_btn.setStyle("-fx-background-color: rgba(255, 187, 225, 1)");
+    }
+    public void go_to_patient_page(){
+        hideAllPages();
+        admit_patient_page.setVisible(true);
+        rNoChoiceBox.getItems().clear();
+        admit_patient_btn.setStyle("-fx-background-color: rgba(255, 187, 225, 1)");
+        try {
+            Connection conn = DBConnection.getConnection();
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT r_no FROM rooms WHERE r_available = 1;");
+            while (rs.next()) {
+                rNoChoiceBox.getItems().add(rs.getInt("r_no"));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
     public void add_doctor_btn_onClick(ActionEvent event) {
         if(doctorNameTxtField.getText().isBlank() || doctorSpecializationTxtField.getText().isBlank()){
@@ -291,6 +325,7 @@ public class DashboardController {
     public void go_to_add_ambulance_page(){
         hideAllPages();
         add_ambulance_page.setVisible(true);
+        add_ambulance_btn.setStyle("-fx-background-color: rgba(255, 187, 225, 1)");
     }
     public void add_ambulance_btn_onClick(ActionEvent event){
         if(ambulanceNameTxtField.getText().isBlank() || ambulanceVnoTxtField.getText().isBlank()){
@@ -425,6 +460,45 @@ public class DashboardController {
             ambulanceTable.setItems(ambulanceList);
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+    public void admit_Patient_onClick(ActionEvent event){
+        if(patientNameTxtField.getText().isBlank() || ageTxtField.getText().isBlank() || diseaseTxtField.getText().isBlank() || feesTxtField.getText().isBlank() || rNoChoiceBox.getValue() == null || (!mGenderRBtn.isSelected() && !fGenderRBtn.isSelected())){
+            showAlert("Error", "Please fill in all fields.");
+        } else {
+            DBConnection db = new DBConnection();
+            String name = patientNameTxtField.getText();
+            int age = Integer.parseInt(ageTxtField.getText());
+            String gender = mGenderRBtn.isSelected() ? "Male" : "Female";
+            String disease = diseaseTxtField.getText();
+            int fees = Integer.parseInt(feesTxtField.getText());
+            int rno = rNoChoiceBox.getValue();
+            String query = "insert into patients(p_name, p_age, p_gender, p_disease, p_fees, p_rno) values (?, ?, ?, ?, ?, ?);";
+            try (Connection conn = db.getConnection()) {
+                java.sql.PreparedStatement stmt = conn.prepareStatement(query);
+                stmt.setString(1, name);
+                stmt.setInt(2, age);
+                stmt.setString(3, gender);
+                stmt.setString(4, disease);
+                stmt.setInt(5, fees);
+                stmt.setInt(6, rno);
+                int rowsAffected = stmt.executeUpdate();
+                if (rowsAffected > 0) {
+                    showAlert("Success", "Patient admitted successfully.");
+                    patientNameTxtField.clear();
+                    ageTxtField.clear();
+                    diseaseTxtField.clear();
+                    feesTxtField.clear();
+                    rNoChoiceBox.setValue(null);
+                    mGenderRBtn.setSelected(true);
+                    fGenderRBtn.setSelected(false);
+                } else {
+                    showAlert("Error", "Failed to admit patient.");
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                showAlert("Error", "Failed to admit patient: " + e.getMessage());
+            }
         }
     }
 }

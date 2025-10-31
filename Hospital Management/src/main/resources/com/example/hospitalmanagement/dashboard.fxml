@@ -55,7 +55,7 @@
             </HBox>
             <VBox prefHeight="200.0" prefWidth="100.0" styleClass="box-bg" GridPane.rowIndex="1">
                <children>
-                  <Button fx:id="admit_patient_btn" mnemonicParsing="false" prefHeight="37.0" prefWidth="449.0" styleClass="dashboard-buttons" text="Admit Patient" textFill="WHITE">
+                  <Button fx:id="admit_patient_btn" mnemonicParsing="false" onAction="#go_to_patient_page" prefHeight="37.0" prefWidth="449.0" styleClass="dashboard-buttons" text="Admit Patient" textFill="WHITE">
                      <cursor>
                         <Cursor fx:constant="HAND" />
                      </cursor>
@@ -354,7 +354,7 @@
                         </GridPane>
                      </children>
                   </AnchorPane>
-                  <AnchorPane fx:id="add_ambulance_page" layoutX="10.0" layoutY="10.0" prefHeight="809.0" prefWidth="921.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                  <AnchorPane fx:id="add_ambulance_page" layoutX="10.0" layoutY="10.0" prefHeight="809.0" prefWidth="921.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <children>
                         <Label layoutX="381.0" layoutY="63.0" text="Add Ambulance" textFill="WHITE">
                            <font>
@@ -404,6 +404,118 @@
                               <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                            </columnConstraints>
                            <rowConstraints>
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                           </rowConstraints>
+                        </GridPane>
+                     </children>
+                  </AnchorPane>
+                  <AnchorPane fx:id="admit_patient_page" layoutX="10.0" layoutY="10.0" prefHeight="809.0" prefWidth="921.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <children>
+                        <Label layoutX="381.0" layoutY="63.0" text="Admit Patient" textFill="WHITE">
+                           <font>
+                              <Font name="System Bold Italic" size="30.0" />
+                           </font>
+                        </Label>
+                        <GridPane alignment="CENTER" layoutX="171.0" layoutY="166.0" prefHeight="517.0" prefWidth="581.0">
+                           <children>
+                              <Label text="Patient Name: " textFill="WHITE">
+                                 <font>
+                                    <Font name="System Italic" size="22.0" />
+                                 </font>
+                              </Label>
+                              <TextField fx:id="patientNameTxtField" promptText="Name" GridPane.columnIndex="1">
+                                 <font>
+                                    <Font name="System Italic" size="22.0" />
+                                 </font>
+                              </TextField>
+                              <TextField fx:id="ageTxtField" promptText="Age" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                 <font>
+                                    <Font name="System Italic" size="22.0" />
+                                 </font>
+                              </TextField>
+                              <Label layoutX="10.0" layoutY="33.0" text="Age:" textFill="WHITE" GridPane.rowIndex="1">
+                                 <font>
+                                    <Font name="System Italic" size="22.0" />
+                                 </font>
+                              </Label>
+                              <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="233.0" GridPane.columnIndex="1" GridPane.rowIndex="6">
+                                 <children>
+                                    <Button alignment="CENTER" mnemonicParsing="false" onAction="#admit_Patient_onClick" prefHeight="50.0" prefWidth="100.0" style="-fx-background-color: rgb(255, 143, 143);" text="Admit" textFill="WHITE">
+                                       <cursor>
+                                          <Cursor fx:constant="HAND" />
+                                       </cursor>
+                                       <font>
+                                          <Font name="System Bold Italic" size="22.0" />
+                                       </font>
+                                       <HBox.margin>
+                                          <Insets />
+                                       </HBox.margin>
+                                    </Button>
+                                 </children>
+                              </HBox>
+                              <Label layoutX="10.0" layoutY="123.0" text="Gender:" textFill="WHITE" GridPane.rowIndex="2">
+                                 <font>
+                                    <Font name="System Italic" size="22.0" />
+                                 </font>
+                              </Label>
+                              <Label layoutX="10.0" layoutY="209.0" text="Disease:" textFill="WHITE" GridPane.rowIndex="3">
+                                 <font>
+                                    <Font name="System Italic" size="22.0" />
+                                 </font>
+                              </Label>
+                              <TextField fx:id="diseaseTxtField" layoutX="301.0" layoutY="201.0" promptText="Disease" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                                 <font>
+                                    <Font name="System Italic" size="22.0" />
+                                 </font>
+                              </TextField>
+                              <Label layoutX="10.0" layoutY="253.0" text="Fees: " textFill="WHITE" GridPane.rowIndex="4">
+                                 <font>
+                                    <Font name="System Italic" size="22.0" />
+                                 </font>
+                              </Label>
+                              <Label layoutX="10.0" layoutY="327.0" text="Room No.:" textFill="WHITE" GridPane.rowIndex="5">
+                                 <font>
+                                    <Font name="System Italic" size="22.0" />
+                                 </font>
+                              </Label>
+                              <TextField fx:id="feesTxtField" layoutX="301.0" layoutY="23.0" promptText="Fees" GridPane.columnIndex="1" GridPane.rowIndex="4">
+                                 <font>
+                                    <Font name="System Italic" size="22.0" />
+                                 </font>
+                              </TextField>
+                              <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                                 <children>
+                                    <RadioButton fx:id="mGenderRBtn" mnemonicParsing="false" selected="true" text="Male" textFill="WHITE">
+                                       <toggleGroup>
+                                          <ToggleGroup fx:id="gender" />
+                                       </toggleGroup>
+                                       <font>
+                                          <Font name="System Bold Italic" size="18.0" />
+                                       </font>
+                                       <HBox.margin>
+                                          <Insets right="20.0" />
+                                       </HBox.margin>
+                                    </RadioButton>
+                                    <RadioButton fx:id="fGenderRBtn" mnemonicParsing="false" text="Female" textFill="WHITE" toggleGroup="$gender">
+                                       <font>
+                                          <Font name="System Bold Italic" size="18.0" />
+                                       </font>
+                                    </RadioButton>
+                                 </children>
+                              </HBox>
+                              <ChoiceBox fx:id="rNoChoiceBox" prefHeight="50.0" prefWidth="290.0" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                           </children>
+                           <columnConstraints>
+                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                           </columnConstraints>
+                           <rowConstraints>
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                               <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                               <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                               <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
