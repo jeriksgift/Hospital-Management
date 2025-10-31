@@ -110,6 +110,8 @@ public class DashboardController {
     @FXML
     private AnchorPane discharge_patient_page;
     @FXML
+    private AnchorPane update_patient_page;
+    @FXML
     private Button medicine_btn;
     @FXML
     private Button admit_patient_btn;
@@ -163,6 +165,20 @@ public class DashboardController {
     private TextField p_feesTxtField;
     @FXML
     private TextField p_room_no_txt;
+    @FXML
+    private ChoiceBox<String> patientNameChoiceBox_update;
+    @FXML
+    private TextField pAgeTxtField_update;
+    @FXML
+    private RadioButton mGenderRBtn_update;
+    @FXML
+    private RadioButton fGenderRBtn_update;
+    @FXML
+    private TextField p_diseaseTxtField_update;
+    @FXML
+    private TextField p_feesTxtField_update;
+    @FXML
+    private ChoiceBox<Integer> rNoChoiceBox_update;
     private void hideAllPages() {
         medicine_btn.setStyle("-fx-background-color: rgba(255, 187, 225,0.5)");
         admit_patient_btn.setStyle("-fx-background-color: rgba(255, 187, 225,0.5)");
@@ -186,6 +202,7 @@ public class DashboardController {
         add_ambulance_page.setVisible(false);
         admit_patient_page.setVisible(false);
         discharge_patient_page.setVisible(false);
+        update_patient_page.setVisible(false);
     }
 
     public void initialize() {
@@ -385,6 +402,27 @@ public class DashboardController {
                 e.printStackTrace();
                 showAlert("Error", "Failed to add ambulance: " + e.getMessage());
             }
+        }
+    }
+    public  void goToUpdatePage(){
+        hideAllPages();
+        update_patient_page.setVisible(true);
+        update_patient_details_btn.setStyle("-fx-background-color: rgba(255, 187, 225, 1)");
+        patientNameChoiceBox_update.getItems().clear();
+        rNoChoiceBox_update.getItems().clear();
+        try{
+            Connection conn = DBConnection.getConnection();
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT p_name FROM patients;");
+            while (rs.next()) {
+                patientNameChoiceBox_update.getItems().add(rs.getString("p_name"));
+            }
+            rs = stmt.executeQuery("SELECT r_no FROM rooms WHERE r_available = 1;");
+            while (rs.next()) {
+                rNoChoiceBox_update.getItems().add(rs.getInt("r_no"));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
     private void loadMedicines() {
@@ -587,6 +625,78 @@ public class DashboardController {
             } catch (Exception e) {
                 e.printStackTrace();
                 showAlert("Error", "Failed to discharge patient: " + e.getMessage());
+            }
+        }
+    }
+    public void fetchPatientRecord_update(){
+        if(patientNameChoiceBox_update.getValue() == null){
+            showAlert("Error", "Please select a patient.");
+        } else {
+            String name = patientNameChoiceBox_update.getValue();
+            try {
+                Connection conn = DBConnection.getConnection();
+                String query = "SELECT * FROM patients WHERE p_name = ?;";
+                java.sql.PreparedStatement stmt = conn.prepareStatement(query);
+                stmt.setString(1, name);
+                ResultSet rs = stmt.executeQuery();
+                if (rs.next()) {
+                    pAgeTxtField_update.setText(String.valueOf(rs.getInt("p_age")));
+                    String gender = rs.getString("p_gender");
+                    if (gender.equals("Male")) {
+                        mGenderRBtn_update.setSelected(true);
+                        fGenderRBtn_update.setSelected(false);
+                    } else {
+                        mGenderRBtn_update.setSelected(false);
+                        fGenderRBtn_update.setSelected(true);
+                    }
+                    p_diseaseTxtField_update.setText(rs.getString("p_disease"));
+                    p_feesTxtField_update.setText(String.valueOf(rs.getInt("p_fees")));
+                    rNoChoiceBox_update.setValue(rs.getInt("p_rno"));
+                } else {
+                    showAlert("Error", "Patient record not found.");
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                showAlert("Error", "Failed to fetch patient record: " + e.getMessage());
+            }
+        }
+    }
+    public void update_Patient_onClick(ActionEvent event) {
+        if (patientNameChoiceBox_update.getValue() == null || pAgeTxtField_update.getText().isBlank() || p_diseaseTxtField_update.getText().isBlank() || p_feesTxtField_update.getText().isBlank() || rNoChoiceBox_update.getValue() == null || (!mGenderRBtn_update.isSelected() && !fGenderRBtn_update.isSelected())) {
+            showAlert("Error", "Please fill in all fields.");
+        } else {
+            DBConnection db = new DBConnection();
+            String name = patientNameChoiceBox_update.getValue();
+            int age = Integer.parseInt(pAgeTxtField_update.getText());
+            String gender = mGenderRBtn_update.isSelected() ? "Male" : "Female";
+            String disease = p_diseaseTxtField_update.getText();
+            int fees = Integer.parseInt(p_feesTxtField_update.getText());
+            int rno = rNoChoiceBox_update.getValue();
+            String query = "UPDATE patients SET p_age = ?, p_gender = ?, p_disease = ?, p_fees = ?, p_rno = ? WHERE p_name = ?;";
+            try (Connection conn = db.getConnection()) {
+                java.sql.PreparedStatement stmt = conn.prepareStatement(query);
+                stmt.setInt(1, age);
+                stmt.setString(2, gender);
+                stmt.setString(3, disease);
+                stmt.setInt(4, fees);
+                stmt.setInt(5, rno);
+                stmt.setString(6, name);
+                int rowsAffected = stmt.executeUpdate();
+                if (rowsAffected > 0) {
+                    showAlert("Success", "Patient record updated successfully.");
+                    patientNameChoiceBox_update.setValue(null);
+                    pAgeTxtField_update.clear();
+                    p_diseaseTxtField_update.clear();
+                    p_feesTxtField_update.clear();
+                    rNoChoiceBox_update.setValue(null);
+                    mGenderRBtn_update.setSelected(true);
+                    fGenderRBtn_update.setSelected(false);
+                } else {
+                    showAlert("Error", "Failed to update patient record.");
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                showAlert("Error", "Failed to update patient record: " + e.getMessage());
             }
         }
     }

@@ -56,7 +56,7 @@
                   <Font name="System Bold Italic" size="22.0" />
                </font>
             </Button>
-            <Label alignment="CENTER" layoutY="400.0" onMouseClicked="#go_to_register" prefHeight="17.0" prefWidth="750.0" text="Don't have an account, Click here to login" textFill="WHITE">
+            <Label alignment="CENTER" layoutY="400.0" onMouseClicked="#go_to_register" prefHeight="17.0" prefWidth="750.0" text="Don't have an account, Click here to register" textFill="WHITE">
                <font>
                   <Font size="18.0" />
                </font>
