@@ -108,6 +108,8 @@ public class DashboardController {
     @FXML
     private AnchorPane admit_patient_page;
     @FXML
+    private AnchorPane discharge_patient_page;
+    @FXML
     private Button medicine_btn;
     @FXML
     private Button admit_patient_btn;
@@ -147,6 +149,20 @@ public class DashboardController {
     private TextField feesTxtField;
     @FXML
     private ChoiceBox<Integer> rNoChoiceBox;
+    @FXML
+    private ChoiceBox<String> patientNameChoiceBox;
+    @FXML
+    private TextField pAgeTxtField;
+    @FXML
+    private RadioButton mGenderRBtn1;
+    @FXML
+    private RadioButton fGenderRBtn1;
+    @FXML
+    private TextField p_diseaseTxtField;
+    @FXML
+    private TextField p_feesTxtField;
+    @FXML
+    private TextField p_room_no_txt;
     private void hideAllPages() {
         medicine_btn.setStyle("-fx-background-color: rgba(255, 187, 225,0.5)");
         admit_patient_btn.setStyle("-fx-background-color: rgba(255, 187, 225,0.5)");
@@ -169,6 +185,7 @@ public class DashboardController {
         add_doctor_page.setVisible(false);
         add_ambulance_page.setVisible(false);
         admit_patient_page.setVisible(false);
+        discharge_patient_page.setVisible(false);
     }
 
     public void initialize() {
@@ -290,6 +307,22 @@ public class DashboardController {
             ResultSet rs = stmt.executeQuery("SELECT r_no FROM rooms WHERE r_available = 1;");
             while (rs.next()) {
                 rNoChoiceBox.getItems().add(rs.getInt("r_no"));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    public void go_to_discharge_page(){
+        hideAllPages();
+        discharge_patient_page.setVisible(true);
+        discharge_patient_btn.setStyle("-fx-background-color: rgba(255, 187, 225, 1)");
+        try{
+            patientNameChoiceBox.getItems().clear();
+            Connection conn = DBConnection.getConnection();
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT p_name FROM patients;");
+            while (rs.next()) {
+                patientNameChoiceBox.getItems().add(rs.getString("p_name"));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -498,6 +531,62 @@ public class DashboardController {
             } catch (Exception e) {
                 e.printStackTrace();
                 showAlert("Error", "Failed to admit patient: " + e.getMessage());
+            }
+        }
+    }
+    public void fetchPatientRecord(){
+        if(patientNameChoiceBox.getValue() == null){
+            showAlert("Error", "Please select a patient.");
+        } else {
+            String name = patientNameChoiceBox.getValue();
+            try {
+                Connection conn = DBConnection.getConnection();
+                String query = "SELECT * FROM patients WHERE p_name = ?;";
+                java.sql.PreparedStatement stmt = conn.prepareStatement(query);
+                stmt.setString(1, name);
+                ResultSet rs = stmt.executeQuery();
+                if (rs.next()) {
+                    pAgeTxtField.setText(String.valueOf(rs.getInt("p_age")));
+                    String gender = rs.getString("p_gender");
+                    if (gender.equals("Male")) {
+                        mGenderRBtn1.setSelected(true);
+                        fGenderRBtn1.setSelected(false);
+                    } else {
+                        mGenderRBtn1.setSelected(false);
+                        fGenderRBtn1.setSelected(true);
+                    }
+                    p_diseaseTxtField.setText(rs.getString("p_disease"));
+                    p_feesTxtField.setText(String.valueOf(rs.getInt("p_fees")));
+                    p_room_no_txt.setText(String.valueOf(rs.getInt("p_rno")));
+                } else {
+                    showAlert("Error", "Patient record not found.");
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                showAlert("Error", "Failed to fetch patient record: " + e.getMessage());
+            }
+        }
+    }
+    public void discharge_Patient_onClick(ActionEvent event){
+        if(patientNameChoiceBox.getValue() == null){
+            showAlert("Error", "Please select a patient.");
+        } else {
+            DBConnection db = new DBConnection();
+            String name = patientNameChoiceBox.getValue();
+            String query = "DELETE FROM patients WHERE p_name = ?;";
+            try (Connection conn = db.getConnection()) {
+                java.sql.PreparedStatement stmt = conn.prepareStatement(query);
+                stmt.setString(1, name);
+                int rowsAffected = stmt.executeUpdate();
+                if (rowsAffected > 0) {
+                    showAlert("Success", "Patient discharged successfully.");
+                    patientNameChoiceBox.setValue(null);
+                } else {
+                    showAlert("Error", "Failed to discharge patient.");
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                showAlert("Error", "Failed to discharge patient: " + e.getMessage());
             }
         }
     }
