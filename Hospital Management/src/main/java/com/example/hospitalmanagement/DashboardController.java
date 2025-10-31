@@ -112,6 +112,8 @@ public class DashboardController {
     @FXML
     private AnchorPane update_patient_page;
     @FXML
+    private AnchorPane billing_page;
+    @FXML
     private Button medicine_btn;
     @FXML
     private Button admit_patient_btn;
@@ -179,6 +181,12 @@ public class DashboardController {
     private TextField p_feesTxtField_update;
     @FXML
     private ChoiceBox<Integer> rNoChoiceBox_update;
+    @FXML
+    private ChoiceBox<String> p_name_billing;
+    @FXML
+    private ChoiceBox<Integer> medicine_billing;
+    @FXML
+    private TextField quantity_billing;
     private void hideAllPages() {
         medicine_btn.setStyle("-fx-background-color: rgba(255, 187, 225,0.5)");
         admit_patient_btn.setStyle("-fx-background-color: rgba(255, 187, 225,0.5)");
@@ -203,6 +211,7 @@ public class DashboardController {
         admit_patient_page.setVisible(false);
         discharge_patient_page.setVisible(false);
         update_patient_page.setVisible(false);
+        billing_page.setVisible(false);
     }
 
     public void initialize() {
@@ -424,6 +433,22 @@ public class DashboardController {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+    public void go_to_billing(){
+        hideAllPages();
+        billing_page.setVisible(true);
+        DBConnection db = new DBConnection();
+        try {
+            Connection conn = db.getConnection();
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT p_name FROM patients;");
+
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            showAlert("Error", "Failed.");
+        }
+
     }
     private void loadMedicines() {
         DBConnection db = new DBConnection();
