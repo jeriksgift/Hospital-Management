@@ -1,5 +1,6 @@
 package com.example.hospitalmanagement;
 
+import com.google.protobuf.NullValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -17,6 +18,7 @@ import javafx.stage.StageStyle;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.ArrayList;
 
 public class DashboardController {
     public int user_type;
@@ -184,11 +186,17 @@ public class DashboardController {
     @FXML
     private ChoiceBox<String> p_name_billing;
     @FXML
-    private ChoiceBox<Integer> medicine_billing;
+    private ChoiceBox<String> medicine_billing;
     @FXML
     private TextField quantity_billing;
     @FXML
     private TableView<Billing> table_billing;
+    @FXML
+    private TableColumn<Billing, String> colmName;
+    @FXML
+    private TableColumn<Billing, Integer> colmQuantity;
+    @FXML
+    private TableColumn<Billing, Double> colmPrice;
     private void hideAllPages() {
         medicine_btn.setStyle("-fx-background-color: rgba(255, 187, 225,0.5)");
         admit_patient_btn.setStyle("-fx-background-color: rgba(255, 187, 225,0.5)");
@@ -440,17 +448,28 @@ public class DashboardController {
         hideAllPages();
         billing_page.setVisible(true);
         DBConnection db = new DBConnection();
+        table_billing.getItems().clear();
         try {
             Connection conn = db.getConnection();
             Statement stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery("SELECT p_name FROM patients;");
-
+            p_name_billing.getItems().clear();
+            while (rs.next()) {
+                p_name_billing.getItems().add(rs.getString("p_name"));
+            }
+            rs = stmt.executeQuery("SELECT med_name FROM medicines;");
+            medicine_billing.getItems().clear();
+            while(rs.next()){
+                medicine_billing.getItems().add(rs.getString("med_name"));
+            }
         }
         catch (Exception e) {
             e.printStackTrace();
             showAlert("Error", "Failed.");
         }
-
+        colmName.setCellValueFactory(new PropertyValueFactory<>("medName"));
+        colmQuantity.setCellValueFactory(new PropertyValueFactory<>("quantity"));
+        colmPrice.setCellValueFactory(new PropertyValueFactory<>("price"));
     }
     private void loadMedicines() {
         DBConnection db = new DBConnection();
@@ -725,6 +744,41 @@ public class DashboardController {
                 e.printStackTrace();
                 showAlert("Error", "Failed to update patient record: " + e.getMessage());
             }
+        }
+    }
+    public void add_billing(ActionEvent event){
+        if(p_name_billing.getValue() == null || medicine_billing.getValue() == null || quantity_billing.getText().isBlank()){
+            showAlert("Error", "Please fill in all fields.");
+        }
+        else {
+            String medName = medicine_billing.getValue();
+            int quantity = Integer.parseInt(quantity_billing.getText());
+            double price = 0.0;
+            try {
+                Connection conn = DBConnection.getConnection();
+                String query = "SELECT price FROM medicines WHERE med_name = ?;";
+                java.sql.PreparedStatement stmt = conn.prepareStatement(query);
+                stmt.setString(1, medName);
+                ResultSet rs = stmt.executeQuery();
+                if (rs.next()) {
+                    price = rs.getDouble("price") * quantity;
+                }
+                Billing billing = new Billing(medName, quantity, price);
+                table_billing.getItems().add(billing);
+                quantity_billing.clear();
+            } catch (Exception e) {
+                e.printStackTrace();
+                showAlert("Error", "Failed to add billing: " + e.getMessage());
+            }
+        }
+    }
+    public void print_billing(ActionEvent event){
+        if(p_name_billing.getValue().isBlank() || table_billing.getItems().isEmpty()){
+            showAlert("Error", "No data to print, Please ensure that the patient name and medicine items are not empty");
+        }
+        else {
+            PrintDocument printDocument = new PrintDocument();
+            printDocument.generatePDF(table_billing.getItems(), p_name_billing.getValue());
         }
     }
 }
