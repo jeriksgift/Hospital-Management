@@ -31,6 +31,8 @@ public class DashboardController {
     @FXML
     private Button add_doctor_btn;
     @FXML
+    private Button add_ambulance_btn;
+    @FXML
     private TableView<Medicine> medicineTable;
     @FXML
     private TableColumn<Medicine, Integer> colId;
@@ -100,6 +102,10 @@ public class DashboardController {
     @FXML
     private AnchorPane ambulance_page;
     @FXML
+    private AnchorPane add_doctor_page;
+    @FXML
+    private AnchorPane add_ambulance_page;
+    @FXML
     private Button medicine_btn;
     @FXML
     private Button admit_patient_btn;
@@ -117,6 +123,14 @@ public class DashboardController {
     private Button doctors_btn;
     @FXML
     private Button ambulances_btn;
+    @FXML
+    private TextField doctorNameTxtField;
+    @FXML
+    private TextField doctorSpecializationTxtField;
+    @FXML
+    private TextField ambulanceNameTxtField;
+    @FXML
+    private TextField ambulanceVnoTxtField;
 
 
     private void hideAllPages() {
@@ -136,6 +150,8 @@ public class DashboardController {
         patients_page.setVisible(false);
         rooms_page.setVisible(false);
         ambulance_page.setVisible(false);
+        add_doctor_page.setVisible(false);
+        add_ambulance_page.setVisible(false);
     }
 
     public void initialize() {
@@ -143,9 +159,11 @@ public class DashboardController {
         if (user_type == 1) {
             user_type_txt.setText("Admin");
             add_doctor_btn.setVisible(true);
+            add_ambulance_btn.setVisible(true);
         } else {
             user_type_txt.setText("Receptionist");
             add_doctor_btn.setVisible(false);
+            add_ambulance_btn.setVisible(false);
         }
         hideAllPages();
         dashboard_page.setVisible(true);
@@ -238,6 +256,68 @@ public class DashboardController {
         colDDriName.setCellValueFactory(new PropertyValueFactory<>("driName"));
         VNo.setCellValueFactory(new PropertyValueFactory<>("vNo"));
         loadAmbulances();
+    }
+    public void go_to_add_doctor_page() {
+        hideAllPages();
+        add_doctor_page.setVisible(true);
+    }
+    public void add_doctor_btn_onClick(ActionEvent event) {
+        if(doctorNameTxtField.getText().isBlank() || doctorSpecializationTxtField.getText().isBlank()){
+            showAlert("Error", "Please fill in all fields.");
+        } else {
+            DBConnection db = new DBConnection();
+            String name = doctorNameTxtField.getText();
+            String specialization = doctorSpecializationTxtField.getText();
+            String query = "insert into doctors(d_name, d_spelization) values (?, ?);";
+
+            try(Connection conn = db.getConnection()){
+                java.sql.PreparedStatement stmt = conn.prepareStatement(query);
+                stmt.setString(1, name);
+                stmt.setString(2, specialization);
+                int rowsAffected = stmt.executeUpdate();
+                if(rowsAffected > 0){
+                    showAlert("Success", "Doctor added successfully.");
+                    doctorNameTxtField.clear();
+                    doctorSpecializationTxtField.clear();
+                } else {
+                    showAlert("Error", "Failed to add doctor.");
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                showAlert("Error", "Failed to add doctor: " + e.getMessage());
+            }
+        }
+    }
+    public void go_to_add_ambulance_page(){
+        hideAllPages();
+        add_ambulance_page.setVisible(true);
+    }
+    public void add_ambulance_btn_onClick(ActionEvent event){
+        if(ambulanceNameTxtField.getText().isBlank() || ambulanceVnoTxtField.getText().isBlank()){
+            showAlert("Error", "Please fill in all fields.");
+        } else {
+            DBConnection db = new DBConnection();
+            String name = ambulanceNameTxtField.getText();
+            String vno = ambulanceVnoTxtField.getText();
+            String query = "insert into ambulances(dri_name, v_no) values (?, ?);";
+
+            try(Connection conn = db.getConnection()){
+                java.sql.PreparedStatement stmt = conn.prepareStatement(query);
+                stmt.setString(1, name);
+                stmt.setString(2, vno);
+                int rowsAffected = stmt.executeUpdate();
+                if(rowsAffected > 0){
+                    showAlert("Success", "Ambulance added successfully.");
+                    ambulanceNameTxtField.clear();
+                    ambulanceVnoTxtField.clear();
+                } else {
+                    showAlert("Error", "Failed to add ambulance.");
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                showAlert("Error", "Failed to add ambulance: " + e.getMessage());
+            }
+        }
     }
     private void loadMedicines() {
         DBConnection db = new DBConnection();

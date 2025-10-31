@@ -7,10 +7,12 @@
     -fx-background-color: rgba(140, 0, 255, 0.35);
     -fx-background-radius: 20;
 }
+
 .dashboard-buttons{
     -fx-background-color: rgba(255, 187, 225,0.5);
     -fx-background-radius: 15;
 }
+
 .table-view {
     -fx-background-color: rgba(43, 45, 66, 0.5);
     -fx-text-fill: white;
