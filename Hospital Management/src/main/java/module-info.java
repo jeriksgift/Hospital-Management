@@ -4,6 +4,8 @@ module com.example.hospitalmanagement {
     requires java.sql;
     requires javafx.graphics;
     requires java.desktop;
+    requires transitive itextpdf;
+    requires com.google.protobuf;
 
 
     opens com.example.hospitalmanagement to javafx.fxml;
