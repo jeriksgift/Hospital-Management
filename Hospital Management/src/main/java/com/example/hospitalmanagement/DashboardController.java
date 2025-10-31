@@ -187,6 +187,8 @@ public class DashboardController {
     private ChoiceBox<Integer> medicine_billing;
     @FXML
     private TextField quantity_billing;
+    @FXML
+    private TableView<Billing> table_billing;
     private void hideAllPages() {
         medicine_btn.setStyle("-fx-background-color: rgba(255, 187, 225,0.5)");
         admit_patient_btn.setStyle("-fx-background-color: rgba(255, 187, 225,0.5)");
