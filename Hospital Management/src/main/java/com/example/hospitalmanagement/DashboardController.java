@@ -447,6 +447,7 @@ public class DashboardController {
     public void go_to_billing(){
         hideAllPages();
         billing_page.setVisible(true);
+        billing_btn.setStyle("-fx-background-color: rgba(255, 187, 225, 1)");
         DBConnection db = new DBConnection();
         table_billing.getItems().clear();
         try {
