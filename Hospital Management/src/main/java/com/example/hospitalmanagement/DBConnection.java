@@ -4,9 +4,12 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 public class DBConnection {
     // Update these values for your database
-    private static final String URL = "jdbc:mysql://localhost:3306/hospital";
+    private static final String HOST = "java-hospital.cdiwkuk62ztz.ap-southeast-2.rds.amazonaws.com";
+    private static final String PORT = "3306";
+    private static final String DB_NAME = "hospital";
+    private static final String URL = "jdbc:mysql://" + HOST + ":" + PORT + "/" + DB_NAME + "?useSSL=false&serverTimezone=UTC";
     private static final String USER = "jeriks";
-    private static final String PASSWORD = "jeriks";
+    private static final String PASSWORD = "jeriksgiftson";
     public static Connection getConnection() {
         Connection connection = null;
         try {
