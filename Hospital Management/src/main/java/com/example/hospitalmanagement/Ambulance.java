@@ -9,13 +9,7 @@ public class Ambulance {
         this.driName = driName;
         this.vNo = vNo;
     }
-    public int getDriId() {
-        return driId;
-    }
-    public String getDriName() {
-        return driName;
-    }
-    public String getVNo() {
-        return vNo;
-    }
+    public int getDriId() {return driId;}
+    public String getDriName() {return driName;}
+    public String getVNo() {return vNo;}
 }

@@ -3,12 +3,10 @@ package com.example.hospitalmanagement;
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.*;
 import javafx.collections.ObservableList;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.sql.Connection;
 import java.util.ArrayList;
-
 public class PrintDocument {
     public void generatePDF(ObservableList<Billing> tableData, String patientName) {
         String dest = "JavaHospitalBill_" + System.currentTimeMillis() + ".pdf";
@@ -53,14 +51,11 @@ public class PrintDocument {
                 table.addCell(String.format("%.2f", item.getPrice()));
                 total += item.getPrice();
             }
-
             document.add(table);
             document.add(new Paragraph("--------------------------------------------------------------\n"));
             document.add(new Paragraph("Total: ₹" + total + "\n"));
-
             document.close();
             System.out.println("PDF Generated: " + dest);
-
             try{
                 DBConnection dbConnection = new DBConnection();
                 Connection conn = dbConnection.getConnection();
@@ -74,9 +69,7 @@ public class PrintDocument {
             catch (Exception e){
                 e.printStackTrace();
             }
-            // Optional: open automatically
             java.awt.Desktop.getDesktop().open(new File(dest));
-
         } catch (Exception e) {
             e.printStackTrace();
         }

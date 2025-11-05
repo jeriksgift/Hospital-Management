@@ -9,13 +9,7 @@ public class Billing {
         this.quantity = quantity;
         this.price = price;
     }
-    public String getMedName() {
-        return medName;
-    }
-    public int getQuantity() {
-        return quantity;
-    }
-    public double getPrice() {
-        return price;
-    }
+    public String getMedName() {return medName;}
+    public int getQuantity() {return quantity;}
+    public double getPrice() {return price;}
 }
