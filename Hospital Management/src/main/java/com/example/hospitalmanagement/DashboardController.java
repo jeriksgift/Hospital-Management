@@ -16,6 +16,7 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
@@ -593,7 +594,7 @@ public class DashboardController {
             int rno = rNoChoiceBox.getValue();
             String query = "insert into patients(p_name, p_age, p_gender, p_disease, p_fees, p_rno) values (?, ?, ?, ?, ?, ?);";
             try (Connection conn = db.getConnection()) {
-                java.sql.PreparedStatement stmt = conn.prepareStatement(query);
+                PreparedStatement stmt = conn.prepareStatement(query);
                 stmt.setString(1, name);
                 stmt.setInt(2, age);
                 stmt.setString(3, gender);
@@ -627,7 +628,7 @@ public class DashboardController {
             try {
                 Connection conn = DBConnection.getConnection();
                 String query = "SELECT * FROM patients WHERE p_name = ?;";
-                java.sql.PreparedStatement stmt = conn.prepareStatement(query);
+                PreparedStatement stmt = conn.prepareStatement(query);
                 stmt.setString(1, name);
                 ResultSet rs = stmt.executeQuery();
                 if (rs.next()) {
@@ -660,7 +661,7 @@ public class DashboardController {
             String name = patientNameChoiceBox.getValue();
             String query = "DELETE FROM patients WHERE p_name = ?;";
             try (Connection conn = db.getConnection()) {
-                java.sql.PreparedStatement stmt = conn.prepareStatement(query);
+                PreparedStatement stmt = conn.prepareStatement(query);
                 stmt.setString(1, name);
                 int rowsAffected = stmt.executeUpdate();
                 if (rowsAffected > 0) {
@@ -721,7 +722,7 @@ public class DashboardController {
             int rno = rNoChoiceBox_update.getValue();
             String query = "UPDATE patients SET p_age = ?, p_gender = ?, p_disease = ?, p_fees = ?, p_rno = ? WHERE p_name = ?;";
             try (Connection conn = db.getConnection()) {
-                java.sql.PreparedStatement stmt = conn.prepareStatement(query);
+                PreparedStatement stmt = conn.prepareStatement(query);
                 stmt.setInt(1, age);
                 stmt.setString(2, gender);
                 stmt.setString(3, disease);

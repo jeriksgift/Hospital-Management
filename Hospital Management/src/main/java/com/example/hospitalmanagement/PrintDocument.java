@@ -3,6 +3,8 @@ package com.example.hospitalmanagement;
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.*;
 import javafx.collections.ObservableList;
+
+import java.awt.Desktop;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.sql.Connection;
@@ -45,6 +47,7 @@ public class PrintDocument {
             table.addCell("Quantity");
             table.addCell("Price");
             double total = 0.0;
+
             for (Billing item : tableData) {
                 table.addCell(item.getMedName());
                 table.addCell(String.valueOf(item.getQuantity()));
@@ -69,7 +72,7 @@ public class PrintDocument {
             catch (Exception e){
                 e.printStackTrace();
             }
-            java.awt.Desktop.getDesktop().open(new File(dest));
+            Desktop.getDesktop().open(new File(dest));
         } catch (Exception e) {
             e.printStackTrace();
         }
