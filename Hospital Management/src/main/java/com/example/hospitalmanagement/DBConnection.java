@@ -29,16 +29,4 @@ public class DBConnection {
         return connection;
     }
 
-    public static void main(String[] args) {
-        // Test connection
-        Connection conn = getConnection();
-        if (conn != null) {
-            try {
-                conn.close();
-                System.out.println("🔒 Connection closed.");
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-    }
 }

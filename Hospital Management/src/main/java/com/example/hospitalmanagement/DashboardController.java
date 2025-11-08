@@ -336,14 +336,17 @@ public class DashboardController {
     public void go_to_patient_page(){
         hideAllPages();
         admit_patient_page.setVisible(true);
-        rNoChoiceBox.getItems().clear();
         admit_patient_btn.setStyle("-fx-background-color: rgba(255, 187, 225, 1)");
+        set_room_availability_in_choicebox(rNoChoiceBox);
+    }
+    private void set_room_availability_in_choicebox(ChoiceBox<Integer> R_noChoiceBox){
+        R_noChoiceBox.getItems().clear();
         try {
             Connection conn = DBConnection.getConnection();
             Statement stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery("SELECT r_no FROM rooms WHERE r_available = 1;");
             while (rs.next()) {
-                rNoChoiceBox.getItems().add(rs.getInt("r_no"));
+                R_noChoiceBox.getItems().add(rs.getInt("r_no"));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -437,10 +440,7 @@ public class DashboardController {
             while (rs.next()) {
                 patientNameChoiceBox_update.getItems().add(rs.getString("p_name"));
             }
-            rs = stmt.executeQuery("SELECT r_no FROM rooms WHERE r_available = 1;");
-            while (rs.next()) {
-                rNoChoiceBox_update.getItems().add(rs.getInt("r_no"));
-            }
+            set_room_availability_in_choicebox(rNoChoiceBox_update);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -611,6 +611,7 @@ public class DashboardController {
                     rNoChoiceBox.setValue(null);
                     mGenderRBtn.setSelected(true);
                     fGenderRBtn.setSelected(false);
+                    set_room_availability_in_choicebox(rNoChoiceBox);
                 } else {
                     showAlert("Error", "Failed to admit patient.");
                 }
@@ -667,6 +668,12 @@ public class DashboardController {
                 if (rowsAffected > 0) {
                     showAlert("Success", "Patient discharged successfully.");
                     patientNameChoiceBox.setValue(null);
+                    pAgeTxtField.setText("");
+                    mGenderRBtn1.setSelected(true);
+                    fGenderRBtn1.setSelected(false);
+                    p_diseaseTxtField.setText("");
+                    p_feesTxtField.setText("");
+                    p_room_no_txt.setText("");
                 } else {
                     showAlert("Error", "Failed to discharge patient.");
                 }
@@ -739,6 +746,7 @@ public class DashboardController {
                     rNoChoiceBox_update.setValue(null);
                     mGenderRBtn_update.setSelected(true);
                     fGenderRBtn_update.setSelected(false);
+                    set_room_availability_in_choicebox(rNoChoiceBox_update);
                 } else {
                     showAlert("Error", "Failed to update patient record.");
                 }
